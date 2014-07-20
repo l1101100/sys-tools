@@ -4,6 +4,9 @@
 # Ali Erdinc Koroglu - http://ae.koroglu.org
 # License   : GNU GPL (http://www.gnu.org/licenses/gpl.html)
 #
+# You must install daemonize package from EPEL repository to use this script.
+# How to add EPEL repository: http://ae.koroglu.org/docs/adding-epel-repository-on-centos/
+#
 # History:
 # 2014-08-19 : First release
 
