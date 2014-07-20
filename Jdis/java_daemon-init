@@ -25,23 +25,22 @@
 . /etc/init.d/functions
 
 # Java Home
-java_home="/usr/java/jdk1.7.0_45"
-
+java_home="/usr/java/jdk1.7.0_45"                                               # java path
 
 # Service settings
-service_name="websocket"
-service_user="farmer"
-pid_file="/var/run/$service_name.pid"
-log_file="/var/log/$service_name/$service_name.log"
-errlog_file="/var/log/$service_name/$service_name-error.log"
-java="$java_home/bin/java"
-java_appdir="/usr/share/pronet/websocket"
-java_arg1="-server -Dfile.encoding=utf-8"
-java_arg2="-Dproject.properties=$java_appdir/project.properties"
-java_arg3="-Dlog4j.configuration=file:$java_appdir/log4j.properties"
-java_arg4="-jar $java_appdir/pronetgaming-nettosphere-websocket.jar"
-java_arg5="-Xms512m -Xmx4Gm -Xss4M -XX:PermSize=256m -XX:MaxPermSize=256m"
-java_options="$java_arg1 $java_arg2 $java_arg3 $java_arg4 $java_arg5
+service_name="websocket"                                                        # Service name
+service_user="farmer"                                                           # User/group of process
+pid_file="/var/run/$service_name.pid"                                           # Pid file
+log_file="/var/log/$service_name/$service_name.log"                             # StdOut log file
+errlog_file="/var/log/$service_name/$service_name-error.log"                    # StdErr log file
+java="$java_home/bin/java"                                                      # Java binary
+java_appdir="/usr/share/pronet/websocket"                                       # Application path
+java_arg1="-server -Dfile.encoding=utf-8"                                       # Argument 1
+java_arg2="-Dproject.properties=$java_appdir/project.properties"                # Argument 2
+java_arg3="-Dlog4j.configuration=file:$java_appdir/log4j.properties"            # Argument 3
+java_arg4="-jar $java_appdir/pronetgaming-nettosphere-websocket.jar"            # Argument 4
+java_arg5="-Xms512m -Xmx4Gm -Xss4M -XX:PermSize=256m -XX:MaxPermSize=256m"      # Argument 5
+java_args="$java_arg1 $java_arg2 $java_arg3 $java_arg4 $java_arg5               # Java arguments
 
 
 RETVAL=0
@@ -56,7 +55,7 @@ start() {
             echo -n $"already running.."
             failure
         else
-            daemonize -u $service_user -p $pid_file -o $log_file -e $errlog_file -c $java_appdir $java $java_options && success || failure
+            daemonize -u $service_user -p $pid_file -o $log_file -e $errlog_file -c $java_appdir $java $java_args && success || failure
             RETVAL=$?
             [ $RETVAL -eq 0 ] && touch /var/lock/subsys/$service_name
         fi;
