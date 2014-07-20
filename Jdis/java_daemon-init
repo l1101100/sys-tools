@@ -1,8 +1,7 @@
 #!/bin/bash
 #
 # Jdis - Java daemon init-script for Red Hat / CentOS Linux
-# Ali Erdinc Koroglu
-# Home page : http://ae.koroglu.org
+# Ali Erdinc Koroglu - http://ae.koroglu.org
 # License   : GNU GPL (http://www.gnu.org/licenses/gpl.html)
 #
 # History:
