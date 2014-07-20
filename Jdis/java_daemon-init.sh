@@ -40,7 +40,7 @@ java_arg2="-Dproject.properties=$java_appdir/project.properties"                
 java_arg3="-Dlog4j.configuration=file:$java_appdir/log4j.properties"            # Argument 3
 java_arg4="-jar $java_appdir/pronetgaming-nettosphere-websocket.jar"            # Argument 4
 java_arg5="-Xms512m -Xmx4Gm -Xss4M -XX:PermSize=256m -XX:MaxPermSize=256m"      # Argument 5
-java_args="$java_arg1 $java_arg2 $java_arg3 $java_arg4 $java_arg5               # Java arguments
+java_args="$java_arg1 $java_arg2 $java_arg3 $java_arg4 $java_arg5"              # Java arguments
 
 
 RETVAL=0
