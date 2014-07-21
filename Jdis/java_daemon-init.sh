@@ -10,7 +10,7 @@
 # History:
 # 2014-08-19 : First release
 
-# chkconfig: 345 99 05
+# chkconfig: 345 85 15
 # description: Java daemon script
 
 ### BEGIN INIT INFO
