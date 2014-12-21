@@ -60,11 +60,14 @@ def proper_exit(status):
 
 def superv_status(hostname,port,username,password,procname):
     try:
-        socket.setdefaulttimeout(10)
+        if hostname is None or port is None:
+            parser.print_help()
+            sys.exit()
         if username is None and password is None:
             serverurl = "http://%s:%s" % (hostname,port)
         else:
             serverurl = "http://%s:%s@%s:%s" % (username,password,hostname,port)
+        socket.setdefaulttimeout(10)
         server = xmlrpclib.Server(serverurl)
         info = server.supervisor.getProcessInfo(procname)
         sprv_status = superv_state(info['statename'])
@@ -78,7 +81,7 @@ def superv_status(hostname,port,username,password,procname):
         print "CRITICAL: Could not connect to supervisord %s" % error_code
         sys.exit(2)
     except Exception, error_code:
-        print "CRITICAL: Could not get any data %s" % error_code
+        print "CRITICAL: %s" % error_code
         sys.exit(2)
 
 superv_status(opts.hostname,opts.port,opts.username,opts.password,opts.procname)
