@@ -13,10 +13,13 @@ from dateutil.relativedelta import relativedelta
 from optparse import OptionParser
 import sys
 
-usage = "usage: %prog -s http://superv:superv@192.168.1.1:9001 -p glassfish"
+usage = "usage: %prog -H 192.168.1.1 -P 9001 -u superv -p superv -a glassfish"
 parser = OptionParser(usage=usage)
-parser.add_option('-s', '--serverurl', dest='serverurl', help="Supervisord server url")
-parser.add_option('-p', '--processes-name', dest='procname', help="Process name in supervisorctl status")
+parser.add_option('-H', '--hostname', dest='hostname', help="Supervisord hostname")
+parser.add_option('-P', '--port', dest='port', help="Supervisord port")
+parser.add_option('-u', '--username', dest='username', help="Supervisord username")
+parser.add_option('-p', '--password', dest='password', help="Supervisord password")
+parser.add_option('-a', '--processes-name', dest='procname', help="Process name in supervisorctl status")
 (opts, args) = parser.parse_args()
 
 def superv_state(state):
@@ -55,9 +58,13 @@ def proper_exit(status):
     else:
         sys.exit(3)
 
-def superv_status(serverurl,procname):
+def superv_status(hostname,port,username,password,procname):
     try:
         socket.setdefaulttimeout(10)
+        if username is None and password is None:
+            serverurl = "http://%s:%s" % (hostname,port)
+        else:
+            serverurl = "http://%s:%s@%s:%s" % (username,password,hostname,port)
         server = xmlrpclib.Server(serverurl)
         info = server.supervisor.getProcessInfo(procname)
         sprv_status = superv_state(info['statename'])
@@ -68,10 +75,10 @@ def superv_status(serverurl,procname):
         print '%s %s: %s' % (procname, sprv_status, uptime_text)
         proper_exit(sprv_status)
     except (socket_error,xmlrpclib.ProtocolError,xmlrpclib.ResponseError), error_code:
-        print "CRITICAL: Could not connect to supervisord: %s" % error_code
+        print "CRITICAL: Could not connect to supervisord %s" % error_code
         sys.exit(2)
     except Exception, error_code:
         print "CRITICAL: Could not get any data %s" % error_code
         sys.exit(2)
 
-superv_status(opts.serverurl,opts.procname)
+superv_status(opts.hostname,opts.port,opts.username,opts.password,opts.procname)
