@@ -13,11 +13,6 @@ from dateutil.relativedelta import relativedelta
 from optparse import OptionParser
 import sys
 
-OK = 0
-WARNING = 1
-CRITICAL = 2
-UNKNOWN = 3
-
 usage = "usage: %prog -s http://superv:superv@192.168.1.1:9001 -p glassfish"
 parser = OptionParser(usage=usage)
 parser.add_option('-s', '--serverurl', dest='serverurl', help="Supervisord server url")
@@ -50,6 +45,16 @@ def time_diff_text(diff):
     else:
         return '%s minute(s)' % (diff.minutes)
 
+def proper_exit(status):
+    if status == 'OK':
+        sys.exit(0)
+    elif status == 'WARNING':
+        sys.exit(1)
+    elif status == 'CRITICAL':
+        sys.exit(2)
+    else:
+        sys.exit(3)
+
 def superv_status(serverurl,procname):
     try:
         socket.setdefaulttimeout(10)
@@ -61,12 +66,12 @@ def superv_status(serverurl,procname):
         diff = relativedelta(time2,time1)
         uptime_text = time_diff_text(diff)
         print '%s %s: %s' % (procname, sprv_status, uptime_text)
-
+        proper_exit(sprv_status)
     except (socket_error,xmlrpclib.ProtocolError,xmlrpclib.ResponseError), error_code:
         print "CRITICAL: Could not connect to supervisord: %s" % error_code
-        sys.exit(CRITICAL)
-    except:
-        print "CRITICAL: Could not get status of %s" % procname
-        sys.exit(CRITICAL)
+        sys.exit(2)
+    except Exception, error_code:
+        print "CRITICAL: Could not get any data %s" % error_code
+        sys.exit(2)
 
 superv_status(opts.serverurl,opts.procname)
