@@ -19,7 +19,7 @@ parser.add_option('-H', '--hostname', dest='hostname', help="Supervisord hostnam
 parser.add_option('-P', '--port', dest='port', help="Supervisord port")
 parser.add_option('-u', '--username', dest='username', help="Supervisord username")
 parser.add_option('-p', '--password', dest='password', help="Supervisord password")
-parser.add_option('-a', '--processes-name', dest='procname', help="Process name in supervisorctl status")
+parser.add_option('-a', '--process-name', dest='procname', help="Process name defined in /etc/supervisor.d/*.ini or supervisorctl status")
 (opts, args) = parser.parse_args()
 
 def superv_state(state):
